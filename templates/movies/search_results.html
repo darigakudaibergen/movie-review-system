@@ -1,0 +1,72 @@
+{% extends 'movies/base.html' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="search-header">
+        <h1>Search Results</h1>
+        {% if query %}
+            <p>Results for: <strong>"{{ query }}"</strong></p>
+        {% endif %}
+    </div>
+
+    <div class="movies-grid">
+        {% if movies %}
+            {% for movie in movies %}
+                <div class="movie-card">
+                    <div class="movie-poster">
+                        {% if movie.poster_url %}
+                            <img src="{{ movie.poster_url }}" alt="{{ movie.title }}">
+                        {% else %}
+                            <div class="poster-placeholder">🎬</div>
+                        {% endif %}
+                    </div>
+                    <div class="movie-info">
+                        <h3>{{ movie.title }}</h3>
+                        <p class="movie-year">{{ movie.release_year }}</p>
+                        <p class="movie-director">Director: {{ movie.director }}</p>
+                        
+                        {% if movie.genre %}
+                            <span class="genre-badge">{{ movie.genre.name }}</span>
+                        {% endif %}
+                        
+                        <div class="rating-section">
+                            <span class="stars">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= movie.average_rating %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="rating-text">
+                                {{ movie.average_rating }}/5
+                            </span>
+                        </div>
+                        
+                        <p class="movie-description">
+                            {{ movie.description|truncatewords:20 }}
+                        </p>
+                        
+                        <a href="{% url 'movie_detail' movie.id %}" class="btn btn-primary">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-results">
+                <h2>No movies found</h2>
+                {% if query %}
+                    <p>No results for "{{ query }}". Try a different search term.</p>
+                {% else %}
+                    <p>Please enter a search term.</p>
+                {% endif %}
+                <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Movie Review System{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="{% url 'home' %}">🎬 MovieReview</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'top_rated' %}">Top Rated</a></li>
+                <li>
+                    <form action="{% url 'search_movies' %}" method="get" class="search-form">
+                        <input type="text" name="q" placeholder="Search movies..." class="search-input">
+                        <button type="submit" class="search-btn">🔍</button>
+                    </form>
+                </li>
+                {% if user.is_authenticated %}
+                    <li><a href="/admin/">Admin Panel</a></li>
+                    <li><span class="user-name">👤 {{ user.username }}</span></li>
+                {% else %}
+                    <li><a href="/admin/login/">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Movie Review System. Created by Group Project Team.</p>
+            <p>Django Web Development Assignment 8</p>
+        </div>
+    </footer>
+</body>
+</html>

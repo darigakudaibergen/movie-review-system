@@ -1,0 +1,103 @@
+{% extends 'movies/base.html' %}
+
+{% block title %}Home - Movie Reviews{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h1>🎥 Discover Amazing Movies</h1>
+        <p>Share your reviews and explore what others think about the latest films</p>
+    </div>
+
+    <!-- Filter and Sort Section -->
+    <div class="filter-section">
+        <form method="get" class="filter-form">
+            <div class="filter-group">
+                <label for="genre">Filter by Genre:</label>
+                <select name="genre" id="genre" onchange="this.form.submit()">
+                    <option value="">All Genres</option>
+                    {% for genre in genres %}
+                        <option value="{{ genre.id }}" 
+                                {% if selected_genre == genre.id|stringformat:"s" %}selected{% endif %}>
+                            {{ genre.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="sort">Sort by:</label>
+                <select name="sort" id="sort" onchange="this.form.submit()">
+                    <option value="-created_at" {% if sort_by == '-created_at' %}selected{% endif %}>
+                        Newest First
+                    </option>
+                    <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>
+                        Highest Rated
+                    </option>
+                    <option value="year" {% if sort_by == 'year' %}selected{% endif %}>
+                        Release Year
+                    </option>
+                    <option value="title" {% if sort_by == 'title' %}selected{% endif %}>
+                        Title (A-Z)
+                    </option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <!-- Movies Grid -->
+    <div class="movies-grid">
+        {% if movies %}
+            {% for movie in movies %}
+                <div class="movie-card">
+                    <div class="movie-poster">
+                        {% if movie.poster_url %}
+                            <img src="{{ movie.poster_url }}" alt="{{ movie.title }}">
+                        {% else %}
+                            <div class="poster-placeholder">🎬</div>
+                        {% endif %}
+                    </div>
+                    <div class="movie-info">
+                        <h3>{{ movie.title }}</h3>
+                        <p class="movie-year">{{ movie.release_year }}</p>
+                        <p class="movie-director">Director: {{ movie.director }}</p>
+                        
+                        {% if movie.genre %}
+                            <span class="genre-badge">{{ movie.genre.name }}</span>
+                        {% endif %}
+                        
+                        <div class="rating-section">
+                            <span class="stars">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= movie.average_rating %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="rating-text">
+                                {{ movie.average_rating }}/5 ({{ movie.review_count }} reviews)
+                            </span>
+                        </div>
+                        
+                        <p class="movie-description">
+                            {{ movie.description|truncatewords:20 }}
+                        </p>
+                        
+                        <a href="{% url 'movie_detail' movie.id %}" class="btn btn-primary">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-results">
+                <h2>No movies found</h2>
+                <p>Try adjusting your filters or check back later!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
