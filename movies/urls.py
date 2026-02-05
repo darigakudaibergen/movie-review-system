@@ -1,7 +1,4 @@
-"""
-URL Configuration for Movies App
-Created by: [Name] - Participant 3
-"""
+
 from django.urls import path
 from . import views
 
