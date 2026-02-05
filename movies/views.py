@@ -1,7 +1,4 @@
-"""
-Views for Movie Review System
-Created by: [Name] - Participant 3
-"""
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -11,9 +8,7 @@ from .forms import ReviewForm
 
 
 def home(request):
-    """
-    Home page showing all movies with filters
-    """
+   
     movies = Movie.objects.all()
     genres = Genre.objects.all()
     
@@ -42,9 +37,7 @@ def home(request):
 
 
 def movie_detail(request, movie_id):
-    """
-    Movie detail page with reviews
-    """
+  
     movie = get_object_or_404(Movie, id=movie_id)
     reviews = movie.reviews.all().select_related('user')
     
@@ -63,9 +56,7 @@ def movie_detail(request, movie_id):
 
 @login_required
 def add_review(request, movie_id):
-    """
-    Add or edit review for a movie
-    """
+  
     movie = get_object_or_404(Movie, id=movie_id)
     
     # Check if user already has a review
@@ -101,9 +92,7 @@ def add_review(request, movie_id):
 
 @login_required
 def delete_review(request, review_id):
-    """
-    Delete user's own review
-    """
+   
     review = get_object_or_404(Review, id=review_id, user=request.user)
     movie_id = review.movie.id
     review.delete()
@@ -112,9 +101,7 @@ def delete_review(request, review_id):
 
 
 def top_rated(request):
-    """
-    Show top rated movies
-    """
+    
     movies = Movie.objects.all()
     
     # Sort by average rating
@@ -137,9 +124,7 @@ def top_rated(request):
 
 
 def search_movies(request):
-    """
-    Search movies by title or director
-    """
+  
     query = request.GET.get('q', '')
     movies = Movie.objects.none()
     
