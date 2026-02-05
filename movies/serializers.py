@@ -1,14 +1,10 @@
-"""
-API Serializers for Movie Review System
-Created by: [Name] - Participant 4
-"""
+
 from rest_framework import serializers
 from .models import Movie, Review, Genre
 from django.contrib.auth.models import User
 
 
 class GenreSerializer(serializers.ModelSerializer):
-    """Serializer for Genre model"""
     movie_count = serializers.SerializerMethodField()
     
     class Meta:
@@ -20,14 +16,12 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializer for User model"""
     class Meta:
         model = User
         fields = ['id', 'username', 'email']
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    """Serializer for Review model"""
     user = UserSerializer(read_only=True)
     movie_title = serializers.CharField(source='movie.title', read_only=True)
     
@@ -48,7 +42,6 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class MovieSerializer(serializers.ModelSerializer):
-    """Serializer for Movie model"""
     genre = GenreSerializer(read_only=True)
     genre_id = serializers.IntegerField(write_only=True, required=False)
     average_rating = serializers.FloatField(read_only=True)
@@ -77,7 +70,6 @@ class MovieSerializer(serializers.ModelSerializer):
 
 
 class MovieListSerializer(serializers.ModelSerializer):
-    """Simplified serializer for movie lists (without reviews)"""
     genre = GenreSerializer(read_only=True)
     average_rating = serializers.FloatField(read_only=True)
     review_count = serializers.IntegerField(read_only=True)
