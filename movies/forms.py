@@ -1,13 +1,9 @@
-"""
-Forms for Movie Review System
-Created by: [Name] - Participant 3
-"""
+
 from django import forms
 from .models import Review
 
 
 class ReviewForm(forms.ModelForm):
-    """Form for creating and editing reviews"""
     
     class Meta:
         model = Review
